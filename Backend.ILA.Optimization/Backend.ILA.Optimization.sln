@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.SimpleInfra.Api", "Caching.SimpleInfra.Api\Caching.SimpleInfra.Api.csproj", "{B8503284-E572-4A0C-B267-57F257055D73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.SimpleInfra.Application", "Caching.SimpleInfra.Application\Caching.SimpleInfra.Application.csproj", "{7B12B3BD-E62E-4225-BEE2-30585C35537A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.SimpleInfra.Domain", "Caching.SimpleInfra.Domain\Caching.SimpleInfra.Domain.csproj", "{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.SimpleInfra.Infrastructure", "Caching.SimpleInfra.Infrastructure\Caching.SimpleInfra.Infrastructure.csproj", "{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.SimpleInfra.Persistence", "Caching.SimpleInfra.Persistence\Caching.SimpleInfra.Persistence.csproj", "{7D991C52-5A12-445B-A229-CD7BDCB04454}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching", "Caching", "{4A2150C3-5588-4820-90A5-F8BC500E3917}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8503284-E572-4A0C-B267-57F257055D73} = {3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}
+		{7B12B3BD-E62E-4225-BEE2-30585C35537A} = {3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}
+		{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3} = {3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}
+		{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D} = {3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}
+		{7D991C52-5A12-445B-A229-CD7BDCB04454} = {3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0}
+		{3C2426EF-1B3E-4477-A5CD-2BFB795EC7C0} = {4A2150C3-5588-4820-90A5-F8BC500E3917}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8503284-E572-4A0C-B267-57F257055D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8503284-E572-4A0C-B267-57F257055D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8503284-E572-4A0C-B267-57F257055D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8503284-E572-4A0C-B267-57F257055D73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B12B3BD-E62E-4225-BEE2-30585C35537A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B12B3BD-E62E-4225-BEE2-30585C35537A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B12B3BD-E62E-4225-BEE2-30585C35537A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B12B3BD-E62E-4225-BEE2-30585C35537A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7FEBFF-D31C-4B83-AD87-89450DA3B1D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CF1F65-2D1B-431D-938B-AE2A0A66E38D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D991C52-5A12-445B-A229-CD7BDCB04454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D991C52-5A12-445B-A229-CD7BDCB04454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D991C52-5A12-445B-A229-CD7BDCB04454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D991C52-5A12-445B-A229-CD7BDCB04454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
