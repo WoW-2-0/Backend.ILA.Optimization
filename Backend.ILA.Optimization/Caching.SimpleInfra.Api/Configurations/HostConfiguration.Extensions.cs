@@ -13,6 +13,18 @@ namespace LocalIdentity.SimpleInfra.Api.Configurations;
 
 public static partial class HostConfiguration
 {
+    private static WebApplicationBuilder AddCaching(this WebApplicationBuilder builder)
+    {
+        // register cache settings
+        builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(nameof(CacheSettings)));
+
+        // register lazy memory cache
+        builder.Services.AddLazyCache();
+        builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
+
+        return builder;
+    }
+
     private static WebApplicationBuilder AddIdentityInfrastructure(this WebApplicationBuilder builder)
     {
         // register db contexts
