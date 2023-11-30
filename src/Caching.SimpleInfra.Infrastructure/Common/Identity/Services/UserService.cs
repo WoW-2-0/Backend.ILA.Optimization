@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 using Caching.SimpleInfra.Application.Common.Identity.Services;
+using Caching.SimpleInfra.Domain.Common.Query;
 using Caching.SimpleInfra.Domain.Entities;
 using Caching.SimpleInfra.Persistence.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LocalIdentity.SimpleInfra.Infrastructure.Common.Identity.Services;
 
@@ -10,6 +12,15 @@ public class UserService(IUserRepository userRepository) : IUserService
     public IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false)
     {
         return userRepository.Get(predicate, asNoTracking);
+    }
+
+    public async ValueTask<IList<User>> GetAsync(
+        QuerySpecification<User> querySpecification,
+        bool asNoTracking = false,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await userRepository.GetAsync(querySpecification, asNoTracking);
     }
 
     public ValueTask<User?> GetByIdAsync(Guid userId, bool asNoTracking = false, CancellationToken cancellationToken = default)

@@ -1,4 +1,5 @@
-﻿using Caching.SimpleInfra.Domain.Entities;
+﻿using System.Data.Common;
+using Caching.SimpleInfra.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Caching.SimpleInfra.Persistence.DataContexts;
@@ -9,6 +10,8 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var test = modelBuilder.Model.GetEntityTypes();
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IdentityDbContext).Assembly);
     }
 }

@@ -1,4 +1,4 @@
-using Caching.SimpleInfra.Application.Common.Querying;
+using Caching.SimpleInfra.Domain.Common.Query;
 
 namespace Caching.SimpleInfra.Application.Common.Extensions;
 

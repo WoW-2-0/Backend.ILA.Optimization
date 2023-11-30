@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Caching.SimpleInfra.Domain.Common.Query;
 using Caching.SimpleInfra.Domain.Entities;
 
 namespace Caching.SimpleInfra.Persistence.Repositories.Interfaces;
@@ -6,6 +7,8 @@ namespace Caching.SimpleInfra.Persistence.Repositories.Interfaces;
 public interface IUserRepository
 {
     IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false);
+
+    ValueTask<IList<User>> GetAsync(QuerySpecification<User> querySpecification, bool asNoTracking = false, CancellationToken cancellationToken = default);
 
     ValueTask<User?> GetByIdAsync(Guid userId, bool asNoTracking = false, CancellationToken cancellationToken = default);
 

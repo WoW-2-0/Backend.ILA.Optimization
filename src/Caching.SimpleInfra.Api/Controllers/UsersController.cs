@@ -1,6 +1,7 @@
 ﻿using Caching.SimpleInfra.Application.Common.Extensions;
 using Caching.SimpleInfra.Application.Common.Identity.Services;
-using Caching.SimpleInfra.Application.Common.Querying;
+using Caching.SimpleInfra.Domain.Common.Query;
+using Caching.SimpleInfra.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,11 @@ namespace LocalIdentity.SimpleInfra.Api.Controllers;
 public class UsersController(IUserService userService) : ControllerBase
 {
     [HttpGet]
-    public async ValueTask<IActionResult> GetById([FromQuery] FilterPagination paginationOptions)
+    public async ValueTask<IActionResult> GetById([FromQuery] FilterPagination paginationOptions, CancellationToken cancellationToken = default)
     {
-        var result = await userService.Get(asNoTracking: true).ApplyPagination(paginationOptions).ToListAsync();
+        var specification = new QuerySpecification<User>(paginationOptions.PageSize, paginationOptions.PageToken);
+
+        var result = await userService.GetAsync(specification, true, cancellationToken);
         return result.Any() ? Ok(result) : NotFound();
     }
 

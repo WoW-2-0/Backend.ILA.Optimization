@@ -1,10 +1,10 @@
 ﻿using Caching.SimpleInfra.Application.Common.Identity.Services;
-using Caching.SimpleInfra.Persistence.Caching;
+using Caching.SimpleInfra.Persistence.Caching.Brokers;
 using Caching.SimpleInfra.Persistence.DataContexts;
 using Caching.SimpleInfra.Persistence.Repositories;
 using Caching.SimpleInfra.Persistence.Repositories.Interfaces;
 using LocalIdentity.SimpleInfra.Api.Data;
-using LocalIdentity.SimpleInfra.Infrastructure.Common.Caching;
+using LocalIdentity.SimpleInfra.Infrastructure.Common.Caching.Brokers;
 using LocalIdentity.SimpleInfra.Infrastructure.Common.Identity.Services;
 using LocalIdentity.SimpleInfra.Infrastructure.Common.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,22 @@ public static partial class HostConfiguration
 
         // register lazy memory cache
         builder.Services.AddLazyCache();
-        builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
+        
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = "localhost:6379";
+        });
+
+        // builder.Services.AddStackExchangeRedisCache(
+        //     options =>
+        //     {
+        //         options.Configuration = builder.Configuration.GetConnectionString("RedisConnectionString");
+        //         options.InstanceName = "LocalIdentity";
+        //     }
+        // );
+
+        // builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
+        builder.Services.AddSingleton<ICacheBroker, RedisDistributedCacheBroker>();
 
         return builder;
     }
