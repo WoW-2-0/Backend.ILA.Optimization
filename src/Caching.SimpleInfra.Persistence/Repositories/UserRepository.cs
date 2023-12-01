@@ -2,19 +2,17 @@
 using Caching.SimpleInfra.Domain.Common.Caching;
 using Caching.SimpleInfra.Domain.Common.Query;
 using Caching.SimpleInfra.Domain.Entities;
-using Caching.SimpleInfra.Domain.Extensions;
-using Caching.SimpleInfra.Persistence.Caching;
 using Caching.SimpleInfra.Persistence.Caching.Brokers;
 using Caching.SimpleInfra.Persistence.DataContexts;
 using Caching.SimpleInfra.Persistence.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Caching.SimpleInfra.Persistence.Repositories;
 
 public class UserRepository(IdentityDbContext dbContext, ICacheBroker cacheBroker) : EntityRepositoryBase<User, IdentityDbContext>(
     dbContext,
     cacheBroker,
-    new CacheEntryOptions(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(3))
+    new CacheEntryOptions()
+    // new CacheEntryOptions(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(3))
 ), IUserRepository
 {
     public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false) =>

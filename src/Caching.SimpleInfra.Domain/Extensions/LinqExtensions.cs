@@ -8,10 +8,7 @@ public static class LinqExtensions
     public static IQueryable<TSource> ApplySpecification<TSource>(this IQueryable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        source = source
-            .ApplyPredicates(querySpecification)
-            .ApplyOrdering(querySpecification)
-            .ApplyPagination(querySpecification.Pagination);
+        source = source.ApplyPredicates(querySpecification).ApplyOrdering(querySpecification).ApplyPagination(querySpecification);
 
         return source;
     }
@@ -19,10 +16,7 @@ public static class LinqExtensions
     public static IEnumerable<TSource> ApplySpecification<TSource>(this IEnumerable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        source = source
-            .ApplyPredicates(querySpecification)
-            .ApplyOrdering(querySpecification)
-            .ApplyPagination(querySpecification.Pagination);
+        source = source.ApplyPredicates(querySpecification).ApplyOrdering(querySpecification).ApplyPagination(querySpecification);
 
         return source;
     }
@@ -30,7 +24,7 @@ public static class LinqExtensions
     public static IQueryable<TSource> ApplyPredicates<TSource>(this IQueryable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        querySpecification.Predicates.ForEach(predicate => source = source.Where(predicate));
+        querySpecification.FilteringOptions.ForEach(predicate => source = source.Where(predicate));
 
         return source;
     }
@@ -38,7 +32,7 @@ public static class LinqExtensions
     public static IEnumerable<TSource> ApplyPredicates<TSource>(this IEnumerable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        querySpecification.Predicates.ForEach(predicate => source = source.Where(predicate.Compile()));
+        querySpecification.FilteringOptions.ForEach(predicate => source = source.Where(predicate.Compile()));
 
         return source;
     }
@@ -46,7 +40,7 @@ public static class LinqExtensions
     public static IQueryable<TSource> ApplyOrdering<TSource>(this IQueryable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        querySpecification.OrderByExpressions.ForEach(
+        querySpecification.OrderingOptions?.ForEach(
             orderByExpression => source = orderByExpression.IsAscending
                 ? source.OrderBy(orderByExpression.Item1)
                 : source.OrderByDescending(orderByExpression.Item1)
@@ -58,7 +52,7 @@ public static class LinqExtensions
     public static IEnumerable<TSource> ApplyOrdering<TSource>(this IEnumerable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
-        querySpecification.OrderByExpressions.ForEach(
+        querySpecification.OrderingOptions?.ForEach(
             orderByExpression => source = orderByExpression.IsAscending
                 ? source.OrderBy(orderByExpression.Item1.Compile())
                 : source.OrderByDescending(orderByExpression.Item1.Compile())
@@ -67,13 +61,19 @@ public static class LinqExtensions
         return source;
     }
 
-    public static IQueryable<TSource> ApplyPagination<TSource>(this IQueryable<TSource> source, FilterPagination paginationOptions)
+    public static IQueryable<TSource> ApplyPagination<TSource>(this IQueryable<TSource> source, QuerySpecification<TSource> querySpecification)
+        where TSource : IEntity
     {
-        return source.Skip((paginationOptions.PageToken - 1) * paginationOptions.PageSize).Take((int)paginationOptions.PageSize);
+        return source
+            .Skip((int)((querySpecification.PaginationOptions.PageToken - 1) * querySpecification.PaginationOptions.PageSize))
+            .Take((int)querySpecification.PaginationOptions.PageSize);
     }
 
-    public static IEnumerable<TSource> ApplyPagination<TSource>(this IEnumerable<TSource> source, FilterPagination paginationOptions)
+    public static IEnumerable<TSource> ApplyPagination<TSource>(this IEnumerable<TSource> source, QuerySpecification<TSource> querySpecification)
+        where TSource : IEntity
     {
-        return source.Skip((paginationOptions.PageToken - 1) * paginationOptions.PageSize).Take((int)paginationOptions.PageSize);
+        return source
+            .Skip((int)((querySpecification.PaginationOptions.PageToken - 1) * querySpecification.PaginationOptions.PageSize))
+            .Take((int)querySpecification.PaginationOptions.PageSize);
     }
 }

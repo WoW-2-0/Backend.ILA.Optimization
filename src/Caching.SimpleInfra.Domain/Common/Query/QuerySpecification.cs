@@ -1,45 +1,53 @@
 ﻿using System.Linq.Expressions;
 using Caching.SimpleInfra.Domain.Common.Caching;
 using Caching.SimpleInfra.Domain.Common.Entities;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Caching.SimpleInfra.Domain.Common.Query;
 
-public class QuerySpecification<TEntity>(int pageSize, int pageToken) : CacheModel where TEntity : IEntity
+public class QuerySpecification<TEntity>(uint pageSize, uint pageToken) : CacheModel where TEntity : IEntity
 {
-    public List<Expression<Func<TEntity, bool>>> Predicates { get; } = new();
+    public List<Expression<Func<TEntity, bool>>> FilteringOptions { get; } = new();
 
-    public List<(Expression<Func<TEntity, object>>, bool IsAscending)>? OrderByExpressions { get; } = new();
+    public List<(Expression<Func<TEntity, object>> KeySelector, bool IsAscending)>? OrderingOptions { get; } = new();
 
-    public FilterPagination Pagination { get; set; } = new(pageSize, pageToken);
-
-    public void AddPredicate(Expression<Func<TEntity, bool>> criteria)
-    {
-        Predicates.Add(criteria);
-    }
-
-    public void AddOrderBy(Expression<Func<TEntity, object>> orderByExpression, bool isAscending = false)
-    {
-        OrderByExpressions.Add((orderByExpression, isAscending));
-    }
+    public FilterPagination PaginationOptions { get; set; } = new(pageSize, pageToken);
 
     public override int GetHashCode()
     {
         var hashCode = new HashCode();
+
+        var test = FilteringOptions.First().ToString();
         
-        hashCode.Add(Predicates);
-        hashCode.Add(OrderByExpressions);
-        hashCode.Add(Pagination);
+        FilteringOptions?.Order()
+            .Aggregate(
+                hashCode,
+                (current, filter) =>
+                {
+                    current.Add(filter.ToString());
+                    return current;
+                }
+            );
+        
+        OrderingOptions?.Order()
+            .Aggregate(
+                hashCode,
+                (current, order) =>
+                {
+                    current.Add(order.Item1.ToString());
+                    current.Add(order.IsAscending);
+                    return current;
+                }
+            );
+
+        hashCode.Add(PaginationOptions);
 
         return hashCode.ToHashCode();
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not QuerySpecification<TEntity> querySpecification)
-            return false;
-
-        return Predicates.SequenceEqual(querySpecification.Predicates) && OrderByExpressions.SequenceEqual(querySpecification.OrderByExpressions) &&
-               Pagination.Equals(querySpecification.Pagination);
+        return obj is QuerySpecification<TEntity> querySpecification && querySpecification.GetHashCode() == GetHashCode();
     }
 
     public override string CacheKey => $"{typeof(TEntity).Name}_{GetHashCode()}";

@@ -4,16 +4,30 @@ public class FilterPagination
 {
     public FilterPagination()
     {
-        
     }
-    
-    public FilterPagination(int pageSize, int pageToken)
+
+    public FilterPagination(uint pageSize, uint pageToken)
     {
         PageSize = pageSize;
         PageToken = pageToken;
     }
 
-    public int PageSize { get; set; }
+    public uint PageSize { get; }
 
-    public int PageToken { get; set; }
+    public uint PageToken { get; }
+
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+
+        hashCode.Add(PageSize);
+        hashCode.Add(PageToken);
+
+        return hashCode.ToHashCode();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is FilterPagination filterPagination && filterPagination.GetHashCode() == GetHashCode();
+    }
 }

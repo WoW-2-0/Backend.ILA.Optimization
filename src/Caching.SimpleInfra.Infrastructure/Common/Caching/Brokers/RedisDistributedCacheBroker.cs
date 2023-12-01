@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Caching.SimpleInfra.Domain.Common.Caching;
 using Caching.SimpleInfra.Persistence.Caching.Brokers;
+using Force.DeepCloner;
 using LocalIdentity.SimpleInfra.Infrastructure.Common.Settings;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -23,7 +23,7 @@ public class RedisDistributedCacheBroker(IOptions<CacheSettings> cacheSettings, 
         return value is not null ? JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(value)) : default;
     }
 
-    public ValueTask<bool> TryGetAsync<T>(string key, out T value)
+    public ValueTask<bool> TryGetAsync<T>(string key, out T? value)
     {
         var foundEntry = distributedCache.GetString(key);
 
@@ -37,19 +37,41 @@ public class RedisDistributedCacheBroker(IOptions<CacheSettings> cacheSettings, 
         return ValueTask.FromResult(false);
     }
 
-    public ValueTask<T?> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory, CacheEntryOptions? entryOptions = default)
+    public async ValueTask<T?> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory, CacheEntryOptions? entryOptions = default)
     {
-        throw new NotImplementedException();
+        var cachedValue = await distributedCache.GetStringAsync(key);
+        if (cachedValue is not null) return JsonConvert.DeserializeObject<T>(cachedValue);
+
+        var value = await valueFactory();
+        await SetAsync(key, await valueFactory(), entryOptions);
+
+        return value;
     }
 
     public async ValueTask SetAsync<T>(string key, T value, CacheEntryOptions? entryOptions = default)
     {
-        var options = new DistributedCacheEntryOptions();
-        await distributedCache.SetStringAsync(key, JsonConvert.SerializeObject(value), _entryOptions);
+        await distributedCache.SetStringAsync(key, JsonConvert.SerializeObject(value), GetCacheEntryOptions(entryOptions));
     }
 
     public ValueTask DeleteAsync(string key)
     {
-        throw new NotImplementedException();
+        distributedCache.Remove(key);
+
+        return ValueTask.CompletedTask;
+    }
+
+    public DistributedCacheEntryOptions GetCacheEntryOptions(CacheEntryOptions? entryOptions)
+    {
+        if (entryOptions == default || (!entryOptions.AbsoluteExpirationRelativeToNow.HasValue && !entryOptions.SlidingExpiration.HasValue))
+            return _entryOptions;
+
+        var currentEntryOptions = _entryOptions.DeepClone();
+
+        currentEntryOptions.AbsoluteExpirationRelativeToNow = entryOptions.AbsoluteExpirationRelativeToNow 
+                                                              ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
+        currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration 
+                                                ?? currentEntryOptions.SlidingExpiration;
+
+        return currentEntryOptions;
     }
 }

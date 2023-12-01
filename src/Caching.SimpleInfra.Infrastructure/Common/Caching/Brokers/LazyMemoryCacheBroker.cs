@@ -16,45 +16,26 @@ public class LazyMemoryCacheBroker(IAppCache appCache, IOptions<CacheSettings> c
         SlidingExpiration = TimeSpan.FromSeconds(cacheSettings.Value.SlidingExpirationInSeconds)
     };
 
-    public async ValueTask<T> GetAsync<T>(string key) => await appCache.GetAsync<T>(key);
+    public async ValueTask<T?> GetAsync<T>(string key)
+    {
+        return await appCache.GetAsync<T>(key);
+    }
 
     public ValueTask<bool> TryGetAsync<T>(string key, out T value)
     {
-        return new ValueTask<bool>(appCache.TryGetValue(key, out value));
+        return new(appCache.TryGetValue(key, out value));
+    }
+
+    public async ValueTask<T?> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory, CacheEntryOptions? entryOptions = default)
+    {
+        return await appCache.GetOrAddAsync(key, valueFactory, GetCacheEntryOptions(entryOptions));
     }
 
     public ValueTask SetAsync<T>(string key, T value, CacheEntryOptions? entryOptions = default)
     {
-        var currentEntryOptions = _entryOptions;
-
-        if (entryOptions != default)
-        {
-            currentEntryOptions = _entryOptions.DeepClone();
-
-            currentEntryOptions.AbsoluteExpirationRelativeToNow =
-                entryOptions.AbsoluteExpirationRelativeToNow ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
-            currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration ?? currentEntryOptions.SlidingExpiration;
-        }
-
-        appCache.Add(key, value, currentEntryOptions);
+        appCache.Add(key, value, GetCacheEntryOptions(entryOptions));
 
         return ValueTask.CompletedTask;
-    }
-
-    public async ValueTask<T> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory, CacheEntryOptions? entryOptions = default)
-    {
-        var currentEntryOptions = _entryOptions;
-
-        if (entryOptions != default)
-        {
-            currentEntryOptions = _entryOptions.DeepClone();
-
-            currentEntryOptions.AbsoluteExpirationRelativeToNow =
-                entryOptions.AbsoluteExpirationRelativeToNow ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
-            currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration ?? currentEntryOptions.SlidingExpiration;
-        }
-
-        return await appCache.GetOrAddAsync(key, valueFactory, currentEntryOptions);
     }
 
     public ValueTask DeleteAsync(string key)
@@ -62,5 +43,20 @@ public class LazyMemoryCacheBroker(IAppCache appCache, IOptions<CacheSettings> c
         appCache.Remove(key);
 
         return ValueTask.CompletedTask;
+    }
+
+    public MemoryCacheEntryOptions GetCacheEntryOptions(CacheEntryOptions? entryOptions)
+    {
+        if (entryOptions == default || (!entryOptions.AbsoluteExpirationRelativeToNow.HasValue && !entryOptions.SlidingExpiration.HasValue))
+            return _entryOptions;
+
+        var currentEntryOptions = _entryOptions.DeepClone();
+
+        currentEntryOptions.AbsoluteExpirationRelativeToNow = entryOptions.AbsoluteExpirationRelativeToNow 
+                                                              ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
+        currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration 
+                                                ?? currentEntryOptions.SlidingExpiration;
+
+        return currentEntryOptions;
     }
 }

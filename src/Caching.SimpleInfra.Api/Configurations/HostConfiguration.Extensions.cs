@@ -23,18 +23,13 @@ public static partial class HostConfiguration
         
         builder.Services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = "localhost:6379";
+            options.Configuration = builder.Configuration.GetConnectionString("RedisConnectionString");
+            options.InstanceName = "Caching.SimpleInfra";
         });
 
-        // builder.Services.AddStackExchangeRedisCache(
-        //     options =>
-        //     {
-        //         options.Configuration = builder.Configuration.GetConnectionString("RedisConnectionString");
-        //         options.InstanceName = "LocalIdentity";
-        //     }
-        // );
+        builder.Services.AddDistributedMemoryCache();
 
-        // builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
+        builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
         builder.Services.AddSingleton<ICacheBroker, RedisDistributedCacheBroker>();
 
         return builder;
