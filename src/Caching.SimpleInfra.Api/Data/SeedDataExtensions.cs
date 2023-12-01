@@ -17,10 +17,9 @@ public static class SeedDataExtensions
 
     private static async ValueTask SeedUsersAsync(this IdentityDbContext identityDbContext)
     {
-        var userFaker = new Faker<User>()
-            .RuleFor(user => user.FirstName, faker => faker.Person.FirstName)
+        var userFaker = new Faker<User>().RuleFor(user => user.FirstName, faker => faker.Person.FirstName)
             .RuleFor(user => user.LastName, faker => faker.Person.LastName);
-        
+
         await identityDbContext.Users.AddRangeAsync(userFaker.Generate(10000));
         await identityDbContext.SaveChangesAsync();
     }

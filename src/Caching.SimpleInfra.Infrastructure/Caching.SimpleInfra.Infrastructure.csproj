@@ -8,21 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Caching.SimpleInfra.Application\Caching.SimpleInfra.Application.csproj" />
-      <ProjectReference Include="..\Caching.SimpleInfra.Persistence\Caching.SimpleInfra.Persistence.csproj" />
+        <ProjectReference Include="..\Caching.SimpleInfra.Application\Caching.SimpleInfra.Application.csproj"/>
+        <ProjectReference Include="..\Caching.SimpleInfra.Persistence\Caching.SimpleInfra.Persistence.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="12.0.1" />
-        <PackageReference Include="FluentValidation" Version="11.8.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
-        <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="FluentValidation" Version="11.8.0"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0"/>
+        <PackageReference Include="StackExchange.Redis" Version="2.7.4"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="LazyCache" Version="2.4.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
+        <PackageReference Include="LazyCache" Version="2.4.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>
     </ItemGroup>
 
 </Project>

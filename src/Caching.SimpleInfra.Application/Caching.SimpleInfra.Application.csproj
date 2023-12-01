@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Caching.SimpleInfra.Domain\Caching.SimpleInfra.Domain.csproj" />
+        <ProjectReference Include="..\Caching.SimpleInfra.Domain\Caching.SimpleInfra.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.8.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
+        <PackageReference Include="FluentValidation" Version="11.8.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Querying\" />
+        <Folder Include="Common\Querying\"/>
     </ItemGroup>
 
 </Project>

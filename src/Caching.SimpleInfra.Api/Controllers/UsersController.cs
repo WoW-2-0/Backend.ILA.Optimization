@@ -1,10 +1,7 @@
-﻿using Caching.SimpleInfra.Application.Common.Extensions;
-using Caching.SimpleInfra.Application.Common.Identity.Services;
+﻿using Caching.SimpleInfra.Application.Common.Identity.Services;
 using Caching.SimpleInfra.Domain.Common.Query;
 using Caching.SimpleInfra.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LocalIdentity.SimpleInfra.Api.Controllers;
 
@@ -18,9 +15,6 @@ public class UsersController(IUserService userService) : ControllerBase
         var specification = new QuerySpecification<User>(paginationOptions.PageSize, paginationOptions.PageToken);
         specification.FilteringOptions.Add(user => user.FirstName.Length > 4);
         specification.FilteringOptions.Add(user => user.LastName.Length > 5);
-
-        var test = specification.FilteringOptions.First().ToString();
-        var testB = specification.CacheKey;
 
         var result = await userService.GetAsync(specification, true, cancellationToken);
         return result.Any() ? Ok(result) : NotFound();

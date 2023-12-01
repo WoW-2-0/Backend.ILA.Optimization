@@ -53,7 +53,9 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(
                 await cacheBroker.SetAsync(cacheKey, foundEntities, cacheEntryOptions);
         }
         else
+        {
             foundEntities = cachedEntities;
+        }
 
         return foundEntities;
     }
@@ -67,12 +69,14 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(
             var initialQuery = DbContext.Set<TEntity>().AsQueryable();
             if (asNoTracking) initialQuery = initialQuery.AsNoTracking();
 
-            foundEntity = await initialQuery.FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken: cancellationToken);
+            foundEntity = await initialQuery.FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
             if (foundEntity is not null && cacheEntryOptions is not null)
                 await cacheBroker.SetAsync(foundEntity.Id.ToString(), foundEntity, cacheEntryOptions);
         }
         else
+        {
             foundEntity = cachedEntity;
+        }
 
         return foundEntity;
     }
@@ -89,7 +93,7 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(
 
         initialQuery = initialQuery.Where(entity => ids.Contains(entity.Id));
 
-        return await initialQuery.ToListAsync(cancellationToken: cancellationToken);
+        return await initialQuery.ToListAsync(cancellationToken);
     }
 
     protected async ValueTask<TEntity> CreateAsync(TEntity entity, bool saveChanges = true, CancellationToken cancellationToken = default)

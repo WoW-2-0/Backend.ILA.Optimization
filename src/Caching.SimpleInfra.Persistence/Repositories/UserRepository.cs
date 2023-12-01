@@ -14,8 +14,10 @@ public class UserRepository(IdentityDbContext dbContext, ICacheBroker cacheBroke
     new CacheEntryOptions()
 ), IUserRepository
 {
-    public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false) =>
-        base.Get(predicate, asNoTracking);
+    public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false)
+    {
+        return base.Get(predicate, asNoTracking);
+    }
 
     public ValueTask<IList<User>> GetAsync(
         QuerySpecification<User> querySpecification,
@@ -26,15 +28,23 @@ public class UserRepository(IdentityDbContext dbContext, ICacheBroker cacheBroke
         return base.GetAsync(querySpecification, asNoTracking, cancellationToken);
     }
 
-    public new ValueTask<User?> GetByIdAsync(Guid userId, bool asNoTracking = false, CancellationToken cancellationToken = default) =>
-        base.GetByIdAsync(userId, asNoTracking, cancellationToken);
+    public new ValueTask<User?> GetByIdAsync(Guid userId, bool asNoTracking = false, CancellationToken cancellationToken = default)
+    {
+        return base.GetByIdAsync(userId, asNoTracking, cancellationToken);
+    }
 
-    public new ValueTask<User> CreateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default) =>
-        base.CreateAsync(user, saveChanges, cancellationToken);
+    public new ValueTask<User> CreateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+    {
+        return base.CreateAsync(user, saveChanges, cancellationToken);
+    }
 
-    public new ValueTask<User> UpdateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default) =>
-        base.UpdateAsync(user, saveChanges, cancellationToken);
+    public new ValueTask<User> UpdateAsync(User user, bool saveChanges = true, CancellationToken cancellationToken = default)
+    {
+        return base.UpdateAsync(user, saveChanges, cancellationToken);
+    }
 
-    public new ValueTask<User?> DeleteByIdAsync(Guid userId, bool saveChanges = true, CancellationToken cancellationToken = default) =>
-        base.DeleteByIdAsync(userId, saveChanges, cancellationToken);
+    public new ValueTask<User?> DeleteByIdAsync(Guid userId, bool saveChanges = true, CancellationToken cancellationToken = default)
+    {
+        return base.DeleteByIdAsync(userId, saveChanges, cancellationToken);
+    }
 }

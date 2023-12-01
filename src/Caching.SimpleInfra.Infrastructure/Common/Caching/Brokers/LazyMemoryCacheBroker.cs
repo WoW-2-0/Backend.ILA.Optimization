@@ -23,7 +23,7 @@ public class LazyMemoryCacheBroker(IAppCache appCache, IOptions<CacheSettings> c
 
     public ValueTask<bool> TryGetAsync<T>(string key, out T value)
     {
-        return new(appCache.TryGetValue(key, out value));
+        return new ValueTask<bool>(appCache.TryGetValue(key, out value));
     }
 
     public async ValueTask<T?> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory, CacheEntryOptions? entryOptions = default)
@@ -52,10 +52,9 @@ public class LazyMemoryCacheBroker(IAppCache appCache, IOptions<CacheSettings> c
 
         var currentEntryOptions = _entryOptions.DeepClone();
 
-        currentEntryOptions.AbsoluteExpirationRelativeToNow = entryOptions.AbsoluteExpirationRelativeToNow 
-                                                              ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
-        currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration 
-                                                ?? currentEntryOptions.SlidingExpiration;
+        currentEntryOptions.AbsoluteExpirationRelativeToNow =
+            entryOptions.AbsoluteExpirationRelativeToNow ?? currentEntryOptions.AbsoluteExpirationRelativeToNow;
+        currentEntryOptions.SlidingExpiration = entryOptions.SlidingExpiration ?? currentEntryOptions.SlidingExpiration;
 
         return currentEntryOptions;
     }

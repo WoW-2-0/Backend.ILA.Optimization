@@ -3,7 +3,7 @@ using Caching.SimpleInfra.Domain.Common.Entities;
 
 namespace Caching.SimpleInfra.Domain.Comparers;
 
-public class PredicateExpressionComparer<TSource> : IComparer<Expression<Func<TSource, bool>>> 
+public class PredicateExpressionComparer<TSource> : IComparer<Expression<Func<TSource, bool>>>
 {
     public int Compare(Expression<Func<TSource, bool>>? x, Expression<Func<TSource, bool>>? y)
     {
