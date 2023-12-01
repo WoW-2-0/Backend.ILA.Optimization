@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Caching.SimpleInfra.Domain.Common.Caching;
 using Caching.SimpleInfra.Domain.Common.Entities;
-using Microsoft.EntityFrameworkCore.Query;
+using Caching.SimpleInfra.Domain.Comparers;
 
 namespace Caching.SimpleInfra.Domain.Common.Query;
 
@@ -9,7 +9,7 @@ public class QuerySpecification<TEntity>(uint pageSize, uint pageToken) : CacheM
 {
     public List<Expression<Func<TEntity, bool>>> FilteringOptions { get; } = new();
 
-    public List<(Expression<Func<TEntity, object>> KeySelector, bool IsAscending)>? OrderingOptions { get; } = new();
+    public List<(Expression<Func<TEntity, object>> KeySelector, bool IsAscending)> OrderingOptions { get; } = new();
 
     public FilterPagination PaginationOptions { get; set; } = new(pageSize, pageToken);
 
@@ -17,28 +17,11 @@ public class QuerySpecification<TEntity>(uint pageSize, uint pageToken) : CacheM
     {
         var hashCode = new HashCode();
 
-        var test = FilteringOptions.First().ToString();
-        
-        FilteringOptions?.Order()
-            .Aggregate(
-                hashCode,
-                (current, filter) =>
-                {
-                    current.Add(filter.ToString());
-                    return current;
-                }
-            );
-        
-        OrderingOptions?.Order()
-            .Aggregate(
-                hashCode,
-                (current, order) =>
-                {
-                    current.Add(order.Item1.ToString());
-                    current.Add(order.IsAscending);
-                    return current;
-                }
-            );
+        foreach (var filter in FilteringOptions.Order(new PredicateExpressionComparer<TEntity>()))
+            hashCode.Add(filter.ToString());
+
+        foreach (var filter in OrderingOptions.Order(new OrderExpressionComparer<TEntity>()))
+            hashCode.Add(filter.ToString());
 
         hashCode.Add(PaginationOptions);
 

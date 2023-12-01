@@ -12,7 +12,6 @@ public class UserRepository(IdentityDbContext dbContext, ICacheBroker cacheBroke
     dbContext,
     cacheBroker,
     new CacheEntryOptions()
-    // new CacheEntryOptions(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(3))
 ), IUserRepository
 {
     public new IQueryable<User> Get(Expression<Func<User, bool>>? predicate = default, bool asNoTracking = false) =>

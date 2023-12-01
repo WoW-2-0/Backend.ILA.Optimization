@@ -1,11 +1,8 @@
 using System.Linq.Expressions;
-using System.Runtime.InteropServices;
-using Caching.SimpleInfra.Domain.Common;
 using Caching.SimpleInfra.Domain.Common.Caching;
 using Caching.SimpleInfra.Domain.Common.Entities;
 using Caching.SimpleInfra.Domain.Common.Query;
 using Caching.SimpleInfra.Domain.Extensions;
-using Caching.SimpleInfra.Persistence.Caching;
 using Caching.SimpleInfra.Persistence.Caching.Brokers;
 using Microsoft.EntityFrameworkCore;
 

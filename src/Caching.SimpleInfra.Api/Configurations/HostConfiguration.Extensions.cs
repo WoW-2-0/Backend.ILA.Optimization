@@ -27,9 +27,7 @@ public static partial class HostConfiguration
             options.InstanceName = "Caching.SimpleInfra";
         });
 
-        builder.Services.AddDistributedMemoryCache();
-
-        builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
+        // builder.Services.AddSingleton<ICacheBroker, LazyMemoryCacheBroker>();
         builder.Services.AddSingleton<ICacheBroker, RedisDistributedCacheBroker>();
 
         return builder;

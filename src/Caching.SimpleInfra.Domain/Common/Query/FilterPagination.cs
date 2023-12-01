@@ -12,9 +12,9 @@ public class FilterPagination
         PageToken = pageToken;
     }
 
-    public uint PageSize { get; }
+    public uint PageSize { get; set; }
 
-    public uint PageToken { get; }
+    public uint PageToken { get; set; }
 
     public override int GetHashCode()
     {

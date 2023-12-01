@@ -13,9 +13,14 @@ namespace LocalIdentity.SimpleInfra.Api.Controllers;
 public class UsersController(IUserService userService) : ControllerBase
 {
     [HttpGet]
-    public async ValueTask<IActionResult> GetById([FromQuery] FilterPagination paginationOptions, CancellationToken cancellationToken = default)
+    public async ValueTask<IActionResult> Get([FromQuery] FilterPagination paginationOptions, CancellationToken cancellationToken = default)
     {
         var specification = new QuerySpecification<User>(paginationOptions.PageSize, paginationOptions.PageToken);
+        specification.FilteringOptions.Add(user => user.FirstName.Length > 4);
+        specification.FilteringOptions.Add(user => user.LastName.Length > 5);
+
+        var test = specification.FilteringOptions.First().ToString();
+        var testB = specification.CacheKey;
 
         var result = await userService.GetAsync(specification, true, cancellationToken);
         return result.Any() ? Ok(result) : NotFound();
