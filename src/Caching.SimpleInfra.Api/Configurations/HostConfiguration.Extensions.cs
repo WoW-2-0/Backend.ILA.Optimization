@@ -19,7 +19,7 @@ public static partial class HostConfiguration
         builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(nameof(CacheSettings)));
 
         // register lazy memory cache
-        builder.Services.AddLazyCache();
+        // builder.Services.AddLazyCache();
 
         builder.Services.AddStackExchangeRedisCache(
             options =>

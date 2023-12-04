@@ -24,6 +24,8 @@ public static class LinqExtensions
     public static IQueryable<TSource> ApplyPredicates<TSource>(this IQueryable<TSource> source, QuerySpecification<TSource> querySpecification)
         where TSource : IEntity
     {
+        // predicate -> bitta berilgan modelga mos shart saqlaydigan
+        // key selector -> bitta berilgan modeldan bitta berilgan propertyni olib beradigan
         querySpecification.FilteringOptions.ForEach(predicate => source = source.Where(predicate));
 
         return source;
@@ -43,6 +45,7 @@ public static class LinqExtensions
         if (!querySpecification.OrderingOptions.Any())
             source.OrderBy(entity => entity.Id);
 
+        // TODO : use then by
         querySpecification.OrderingOptions.ForEach(
             orderByExpression => source = orderByExpression.IsAscending
                 ? source.OrderBy(orderByExpression.Item1)

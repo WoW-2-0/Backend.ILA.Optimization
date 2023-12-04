@@ -17,10 +17,11 @@ public class QuerySpecification<TEntity>(uint pageSize, uint pageToken) : CacheM
     {
         var hashCode = new HashCode();
 
+        // TODO : this works only within app lifecycle, need to find a way to make it work across app lifecycles
         foreach (var filter in FilteringOptions.Order(new PredicateExpressionComparer<TEntity>()))
             hashCode.Add(filter.ToString());
 
-        foreach (var filter in OrderingOptions.Order(new OrderExpressionComparer<TEntity>()))
+        foreach (var filter in OrderingOptions)
             hashCode.Add(filter.ToString());
 
         hashCode.Add(PaginationOptions);

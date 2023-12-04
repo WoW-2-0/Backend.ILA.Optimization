@@ -111,7 +111,8 @@ public abstract class EntityRepositoryBase<TEntity, TContext>(
     {
         DbContext.Set<TEntity>().Update(entity);
 
-        if (cacheEntryOptions is not null) await cacheBroker.SetAsync(entity.Id.ToString(), entity, cacheEntryOptions);
+        if (cacheEntryOptions is not null)
+            await cacheBroker.SetAsync(entity.Id.ToString(), entity, cacheEntryOptions);
 
         if (saveChanges) await DbContext.SaveChangesAsync(cancellationToken);
 
